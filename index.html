@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Máquina de Turing</title>
+</head>
+<body>
+    <div class="home">
+        <div id="menu">
+            <h1 id="Menu" style= "padding-left: 70px;" >
+                Menu
+            </h1>
+        
+            <br><br><br><br><br>
+
+            <h2 id="h2I" onmouseenter="sintetizarMensaje('Menu de idiomas', 'h2I')">
+                Idioma
+            </h2>
+                <ul id="menuIdioma">
+                    <h2>
+                        <li><a href="#" data-idioma="es" onclick="cambiarIdioma('es')">Español</a></li>
+                        <li><a href="#" data-idioma="en" onclick="cambiarIdioma('en')">English</a></li>
+                        <li><a href="#" data-idioma="pt" onclick="cambiarIdioma('pt')">Português</a></li>
+                </h2>
+              </ul>
+        </div>
+        <h1 id="titulo" data-section="app">
+            Máquina de Turing
+        </h1>
+            <div class="main-content">                
+                <h2 id="barraDelLenguaje" class="plb" data-section="app">Ingresa aquí:</h2>
+                <input id="palabra" type="text" class="plb" onmouseenter="sintetizarMensaje('Ingrese palabra a validar', 'palabra')">
+                <button class="plb" onclick="validar()" id="validador">Validar</button>
+                <div id="resultado" onmouseover="sintetizarMensaje(document.getElementById('resultado').innerText,'resultado')"></div>
+
+                </div>       
+               <div class="vspeed" style="margin-left: 600px; margin-top: 10px;">
+                    <h2 id="Mvelocidad">Velocidad</h2>
+                    <span id="rangeValue">
+                        0
+                    </span>
+                    <input class="range" type="range" min="0" max="1000" value="0" class="velocidad"
+                    onchange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)"></input>
+               </div>
+     
+        </div>
+        <div id="myDiagramDiv">
+        </div>
+    </div>
+</body>
+    <script src="idiomas.js"></script>
+    <script src="site/release/go.js"></script>
+    <script src="script.js"></script>
+
+</html>

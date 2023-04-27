@@ -1,0 +1,138 @@
+/*.home{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#menu{
+    height: 100%;
+    width: 15%; 
+    background-color: aqua; 
+    display: inline-block; 
+    position: absolute;
+    min-width: 15%;
+}
+
+#myDiagramDiv{
+    width:80%; 
+    height:85%; 
+    background-color: #f9fcfc; 
+    left: 208px; 
+    top: 200px; 
+    display: inline-block;
+    position: fixed;
+}
+
+    @media (max-width: 767px) {
+        #menu {
+            padding: 10px;
+        }
+        
+        #myDiagramDiv {
+            height: 300px;
+        }
+    }
+*/
+    .home{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    #menu{
+        height: 100%;
+        width: 15%; 
+        background-color: aqua; 
+        display: inline-block; 
+        position: absolute;
+        min-width: 15%;
+        
+    }
+
+    #titulo{
+      position: fixed;
+      right: 190px;
+      top: -100;
+      text-transform: uppercase;
+      font-size: 50px;
+      text-shadow: 0.05em 0 0 rgb(255, 0, 0, 0.75),
+                  -0.025em -0.05em 0 rgb(0, 255, 0, 0.75),
+                   0.025em 0.05em 0 rgb(0, 0, 255, 0.75);
+  }
+    
+    #myDiagramDiv{
+        width: 60%;; 
+        height: 65%;; 
+        background-color: #f9fcfc; 
+        left: 350px; 
+        top: 250px; 
+        display: inline-block;
+        position: fixed;
+    }
+    
+    @media screen and (max-width: 767px) {
+      /* Estilos para dispositivos móviles */
+      #menu{
+        position: relative;
+        width: 100%;
+        min-width: unset;
+        height: auto;
+      }
+      
+      #myDiagramDiv{
+        width: 100%;
+        height: 400px;
+        left: 0;
+        top: 50px;
+        position: relative;
+      }
+    }
+      
+      #menuIdioma li {
+        display: block;
+        padding: 2%px 5%;
+        border-bottom: 1px solid #775252;
+      }
+      
+      #menuIdioma li:last-child {
+        border-bottom: none;
+      }
+      
+      #menuIdioma li a {
+        display: block;
+        color: black;
+        text-decoration: none;
+      }
+      
+      #menuIdioma li a:hover {
+        background-color: #f2f2f2;
+      }
+      
+      #titulo{
+        padding-left: 40%;
+      }
+
+      #h2I{
+        padding-left: 20%;
+      }
+
+      .main-content{
+        display: inline-block;
+        position: absolute;
+        padding-top: 90px;
+        padding-left: 300px;
+        
+      }
+
+      #resultado{
+        font-family: 'Poppins', sans-serif;
+        position: absolute;
+        top: 200px;
+        left: 302px;
+        width: 353px;
+    
+        font-size: 20px;
+        text-shadow: 0.05em 0 0 rgba(100, 99, 99, 0.75),
+                     
+    }
+
+ 
+
