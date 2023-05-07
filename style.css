@@ -63,7 +63,7 @@
         height: 65%;; 
         background-color: #f9fcfc; 
         left: 350px; 
-        top: 250px; 
+        top: 200px; 
         display: inline-block;
         position: fixed;
     }
@@ -132,6 +132,14 @@
         font-size: 20px;
         text-shadow: 0.05em 0 0 rgba(100, 99, 99, 0.75),
                      
+    }
+
+    #cinta{
+      left: 120px;
+      width: 85%;
+      height: 100px;
+      margin: 0 auto;
+      top: 520px;
     }
 
  
