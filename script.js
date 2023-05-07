@@ -19,13 +19,12 @@ function Automata(){
     ];
     
     automata = gojs(go.Diagram, "myDiagramDiv")
-    
-    // Creamos el layout de los nodos
+
     automata.nodeTemplate =
         gojs(go.Node, "Auto", 
         { width: 50, height: 50},
         new go.Binding("location", "loc"),
-        gojs(go.Shape, "Circle", { fill: "white", stroke: "black", strokeWidth: 2 }),
+        gojs(go.Shape, "Circle", { fill: "aqua", stroke: "black", strokeWidth: 2 }),
         gojs(go.Panel, "Auto",
         { visible: false },
         new go.Binding("visible", "isAccept"),
@@ -34,7 +33,6 @@ function Automata(){
         gojs(go.TextBlock, { margin: 5 }, new go.Binding("text", "text"))
     );
     
-    // Creamos el layout de las conexiones
     automata.linkTemplate =
         gojs(go.Link,
         gojs(go.Shape, { strokeWidth: 2}),
@@ -52,7 +50,6 @@ function Automata(){
           )
     );
     
-    // Agregar los datos al autómata
     automata.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
     automata.isReadOnly = true;
 }
@@ -63,35 +60,30 @@ function crearCinta(){
         nodeDataArray.push({ key: (i).toString(), text: ""});
     }
 
-    
     cinta = gojs(go.Diagram, "cinta", {
         scrollMode: go.Diagram.InfiniteScroll,
         allowVerticalScroll: false
     });
 
-    // Creamos el layout de los nodos
     cinta.nodeTemplate = gojs(go.Node, "Auto",
         { width: 50, height: 50 },
-        // go.Binding("location", "loc"),
-        gojs(go.Shape, "Rectangle", { fill: "white", stroke: "black", stretch: go.GraphObject.Fill }),  // Establecer stretch a Fill
+        gojs(go.Shape, "Rectangle", { fill: "white", stroke: "black", stretch: go.GraphObject.Fill }),
+        gojs(go.Shape, "Rectangle", { width: 60, height: 60, fill: "transparent", stroke: "black", strokeWidth: 2, stroke: "black"}),
         gojs(go.TextBlock, "",
             new go.Binding("text", "text"),
-            { font: "bold 16px Verdana" }
+            { font: "bold 24px Poppins" }
         ),
     );
 
-    // Creamos el layout de la cinta
     let layout = gojs(go.GridLayout, {
-        wrappingWidth: Infinity,  // colocar todos los nodos en una fila
-        spacing: new go.Size(1, 1),  // espacio entre los nodos
+        wrappingWidth: Infinity, 
+        spacing: new go.Size(1, 1), 
         alignment: go.GridLayout.Position,
-        cellSize: new go.Size(50, 50)  // tamaño de celda
+        cellSize: new go.Size(50, 50)
     });
     
-    // asignamos el layout a la cinta
     cinta.layout = layout;
     
-    // Agregamos los datos a la cinta
     cinta.model = new go.GraphLinksModel(nodeDataArray);
     cinta.isReadOnly = true;
 
@@ -109,7 +101,7 @@ function eliminarSimbolos(){
 
 function agregarSimbolos(pos, x){
     cinta.model.commit(function(m){
-        let nodeData = m.findNodeDataForKey((pos + 14).toString());
+        let nodeData = m.findNodeDataForKey((pos+12).toString());
         nodeData.text = x;
         cinta.model.updateTargetBindings(nodeData);
     });
@@ -121,13 +113,13 @@ function agregarSimbolosALaCinta(){
     const textoAux = texto + " ";
     for (let i = 0; i < textoAux.length; i++) {
         simbolo = textoAux.charAt(i);
-        agregarSimbolos(i, simbolo);
+        agregarSimbolos(i+2, simbolo);
     }
 }
 
 function cambiarSimboloBPorA(nodo){
     cinta.model.commit(function(m){
-        let nodeData = m.findNodeDataForKey(nodo.toString());
+        let nodeData = m.findNodeDataForKey((nodo).toString());
         if(nodeData.text == "b"){
             nodeData.text = "a";
             cinta.model.updateTargetBindings(nodeData);
@@ -135,12 +127,12 @@ function cambiarSimboloBPorA(nodo){
     });
 }
 
-function scrollCinta(dx) {
-    var position = cinta.position;
+function moverCinta(dx) {
+    const position = cinta.position;
     cinta.position = new go.Point(position.x - dx, position.y);
 } 
 
-function reiniciarColoresDeNodosYEnlaces(){
+function reinicio(){
     automata.nodes.each(function(node) {
         node.findMainElement().stroke = "black";
         node.findMainElement().fill = "lightblue";
@@ -152,7 +144,7 @@ function reiniciarColoresDeNodosYEnlaces(){
     });
 }
 
-function reemplazarSimboloEnPalabra(palabra){
+function CambiarBporAenlaPalabra(palabra){
     for (let i = 0; i < palabra.length; i++) {
       if (palabra[i] === "b") {
         palabra = palabra.substring(0, i) + "a" + palabra.substring(i + 1);
@@ -161,22 +153,7 @@ function reemplazarSimboloEnPalabra(palabra){
     return palabra;
 }
 
-
-
-function recorrerAutomata() {
-    //let timeoutDelayLinks = 1000;
-    //let timeoutDelay = 2000;
-    let inputWor = document.getElementById("texto").value;
-    let inputWord = inputWor + "B";
-    let currentNode = automata.findNodeForKey("0");
-    let i = 0;
-    let auxIndex = inputWord.length - 1;
-
-    reiniciarColoresDeNodosYEnlaces();
-    procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex);
-}
-
-function procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex, auxIndex) {
+function procesarPalabra(currentNode, inputWord, i, auxIndex, auxIndex) {
     let timeoutDelayLinks = 1000;
     let timeoutDelay = 2000;
     if (i < (inputWord.length * 2) - 2) {
@@ -201,7 +178,7 @@ function procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex, auxIndex
                 }else{
                     if(trans[0] === currentChar && trans[5] === "L"){
                         nextNode = automata.findNodeForKey(link.toNode.data.key);
-                        inputWord = reemplazarSimboloEnPalabra(inputWord);
+                        inputWord = CambiarBporAenlaPalabra(inputWord);
                     }
                 }
             });
@@ -246,14 +223,14 @@ function procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex, auxIndex
     setTimeout(function() {
         link.path.stroke = "red";
         if(i <= inputWord.length - 1){
-            scrollCinta(-50);
+            moverCinta(-50);
             setTimeout(function() {
                 cambiarSimboloBPorA(i + 14);
             },500);
           }else{
-          scrollCinta(50);
+          moverCinta(50);
           }
-        procesarSiguienteCaracter(currentNode, inputWord, i);
+        procesarPalabra(currentNode, inputWord, i);
       }, timeoutDelay);
     } else {
         // Verificar si el nodo actual es un estado de aceptación
@@ -287,15 +264,19 @@ function procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex, auxIndex
   function validar() {
     const palabra = document.getElementById("palabra").value;
     let inputWord = palabra + "B";
-    let currentNode = automata.findNodeForKey("1");
-    let i = 0;
-    let auxIndex = inputWord.length - 1;
 
-    agregarSimbolosALaCinta();
-    reiniciarColoresDeNodosYEnlaces();
-    procesarSiguienteCaracter(currentNode, inputWord, i, auxIndex, auxIndex);
+    let currentNode = inicializarProceso(palabra);
+
+    procesarPalabra(currentNode, inputWord, 0, inputWord.length - 1);
+
     localStorage.setItem(palabra, resultado);
-  }
+}
+
+function inicializarProceso(palabra) {
+    agregarSimbolosALaCinta();
+    reinicio();
+    return automata.findNodeForKey("1");
+}
   
   function rangeSlide(value){
     document.getElementById('rangeValue').innerHTML = value

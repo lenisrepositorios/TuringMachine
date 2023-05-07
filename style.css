@@ -40,7 +40,7 @@
     #menu{
         height: 100%;
         width: 15%; 
-        background-color: aqua; 
+        background-color: rgb(117, 233, 127); 
         display: inline-block; 
         position: absolute;
         min-width: 15%;
@@ -59,7 +59,7 @@
   }
     
     #myDiagramDiv{
-        width: 60%;; 
+        width: 70%;; 
         height: 65%;; 
         background-color: #f9fcfc; 
         left: 350px; 
@@ -89,7 +89,7 @@
       #menuIdioma li {
         display: block;
         padding: 2%px 5%;
-        border-bottom: 1px solid #775252;
+        border-bottom: 1px solid #242121;
       }
       
       #menuIdioma li:last-child {
@@ -142,5 +142,18 @@
       top: 520px;
     }
 
+    .rectangulo {
+      position: absolute;
+      top: 628px;
+      left: 970px;
+      transform: translateX(-50%);
+      border: 4px solid rgb(17, 255, 17);
+      /*padding: 25px;*/   
+      background-color: transparent; 
+      margin: 20px;
+      z-index: 20;
+      width: 48px;
+      height: 50px;
+    }
  
 

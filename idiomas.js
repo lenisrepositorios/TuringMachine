@@ -3,6 +3,8 @@ var idiomas = {
       app: {
         Menu:"Menu",
         h2I:"Idioma",
+        h2II:"Diagramas",
+        Secuencial:"Secuencial",
         historialboton:"Historial",
         titulo: "Máquina de Turing",
         barraDelLenguaje: "Ingresa aquí:",
@@ -15,6 +17,8 @@ var idiomas = {
       app: {
         Menu:"Menu",
         h2I:"Languaje",
+        h2II:"Diagrams",
+        Secuencial:"Sequential",
         historialboton:"history",
         titulo: "Turing Machine",
         barraDelLenguaje: "Enter here:",
@@ -28,6 +32,8 @@ var idiomas = {
       app: {
         Menu:"Menu",
         h2I:"língua",
+        h2II:"Diagramas",
+        Secuencial:"Sequencial",
         historialboton:"história",
         titulo: "Máquina de Turing",
         barraDelLenguaje: "Entrar aqui:",
@@ -43,6 +49,8 @@ var idiomas = {
   
     document.querySelector("#Menu").textContent = datosDeIdioma.Menu;
     document.querySelector("#h2I").textContent = datosDeIdioma.h2I;
+    document.querySelector("#h2II").textContent = datosDeIdioma.h2II;
+    document.querySelector("#Secuencial").textContent = datosDeIdioma.Secuencial;
     document.querySelector("#titulo").textContent = datosDeIdioma.titulo;
     document.querySelector("#barraDelLenguaje").textContent = datosDeIdioma.barraDelLenguaje;
     document.querySelector("#validador").textContent = datosDeIdioma.validador;
