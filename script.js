@@ -8,14 +8,16 @@ crearCinta();
 function Automata(){
     let nodeDataArray = [
         { key: "1", text: "q1", loc: new go.Point(250, -50), isAccept: true},
-        { key: "2", text: "q2", loc: new go.Point(550, -50)},
+        { key: "2", text: "q2", loc: new go.Point(450, -50)},   
     ];
         
     let linkDataArray = [
-        { from: "1", to: "1", text: "a, a/R\nb, a/R" },
+        { from: "1", to: "1", text: "a, a/R\nb, a/R\na, a/L" },
         { from: "1", to: "2", text: "B, B/L" },
         { from: "2", to: "2", text: "a, a/L" },
-        { from: "2", to: "1", text: "B, B/R" },
+        { from: "2", to: "1", text: "a, a/L" },
+        //{ from: "2", to: "3", text: "a, a/L" },   
+       // { from: "2", to: "1", text: "a, a/L" },
     ];
     
     automata = gojs(go.Diagram, "myDiagramDiv")
@@ -38,13 +40,13 @@ function Automata(){
         gojs(go.Shape, { strokeWidth: 2}),
         gojs(go.Shape, { toArrow: "Standard", fill: null }),
         gojs(go.TextBlock, new go.Binding("text", "text"),
-        { position: new go.Point(6, 6), font: "13pt sans-serif" }, 
+        { position: new go.Point(6, 6), font: "18px Poppins" }, 
           new go.Binding("text", "loc"),
           new go.Binding("segmentOffset", "", function(link) {
-            if (link.from === "0" && link.to === "0") {
+            if (link.from === link.to && link.to === link.from) {
               return new go.Point(0, -30);
             } else {
-              return new go.Point(0, -20);
+              return new go.Point(0, -40);
             }
           })
           )
@@ -56,7 +58,7 @@ function Automata(){
 
 function crearCinta(){
     let nodeDataArray = [];
-    for (let i = 0; i <= 30; i++) {
+    for (let i = 0; i <= 50; i++) {
         nodeDataArray.push({ key: (i).toString(), text: ""});
     }
 
@@ -113,7 +115,7 @@ function agregarSimbolosALaCinta(){
     const textoAux = texto + " ";
     for (let i = 0; i < textoAux.length; i++) {
         simbolo = textoAux.charAt(i);
-        agregarSimbolos(i+2, simbolo);
+        agregarSimbolos(i, simbolo);
     }
 }
 
@@ -128,19 +130,18 @@ function cambiarSimboloBPorA(nodo){
 }
 
 function moverCinta(dx) {
-    const position = cinta.position;
+    const {position} = cinta;
     cinta.position = new go.Point(position.x - dx, position.y);
 } 
 
 function reinicio(){
-    automata.nodes.each(function(node) {
+    automata.nodes.each(node => {
         node.findMainElement().stroke = "black";
         node.findMainElement().fill = "lightblue";
       });
   
-    automata.links.each(function(link) {
+    automata.links.each(link => {
       link.path.stroke = "black";
-      link.path.strokeDashArray = [];
     });
 }
 
@@ -153,48 +154,49 @@ function CambiarBporAenlaPalabra(palabra){
     return palabra;
 }
 
-function procesarPalabra(currentNode, inputWord, i, auxIndex, auxIndex) {
+function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
     let timeoutDelayLinks = 1000;
     let timeoutDelay = 2000;
     if (i < (inputWord.length * 2) - 2) {
-      let nextNode = null;
-      let currentChar = "";
+      let nodoSgte = null;
+      let simboloActual = "";
 
       if(i < inputWord.length){
-        currentChar = inputWord.charAt(i);
+        simboloActual = inputWord.charAt(i);
       }else{
-        currentChar = inputWord.charAt(auxIndex);
+        simboloActual = inputWord.charAt(auxIndex);
         auxIndex--;
       }
 
       automata.links.each(function(link) {
-        if (link.fromNode.data.key === currentNode.data.key){
+        if (link.fromNode.data.key === nodoActual.data.key){
             let transicion = link.data.text.split("\n");
             transicion.forEach(trans => {
                 if(i < inputWord.length - 1){
-                    if(trans[0] === currentChar && trans[5] === "R"){
-                        nextNode = automata.findNodeForKey(link.toNode.data.key);
+                    if(trans[0] === simboloActual && trans[5] === "R"){
+                        nodoSgte = automata.findNodeForKey(link.toNode.data.key);
+                        console.log(simboloActual)
                     }
                 }else{
-                    if(trans[0] === currentChar && trans[5] === "L"){
-                        nextNode = automata.findNodeForKey(link.toNode.data.key);
+                    if(trans[0] === simboloActual && trans[5] === "L"){
+                        nodoSgte = automata.findNodeForKey(link.toNode.data.key);
                         inputWord = CambiarBporAenlaPalabra(inputWord);
+                        console.log(simboloActual)   
                     }
                 }
             });
         }
     });
 
-      if (nextNode === null) {
-          currentNode.findMainElement().stroke = "black";
-          currentNode.findMainElement().fill = "red";
-          console.log("No se encontró el siguiente nodo");
+      if (nodoSgte === null) {
+          nodoActual.findMainElement().stroke = "black";
+          nodoActual.findMainElement().fill = "red";
           return;
       }
 
       let link = null;
-      automata.links.each(function(l) {
-          if (l.fromNode === currentNode && l.toNode === nextNode) {
+      automata.links.each(l => {
+          if (l.fromNode === nodoActual && l.toNode === nodoSgte) {
               link = l;
               return false;
           }
@@ -205,47 +207,37 @@ function procesarPalabra(currentNode, inputWord, i, auxIndex, auxIndex) {
       }
 
       // Colorear el nodo actual y el enlace
-      currentNode.findMainElement().stroke = "green";
-      currentNode.findMainElement().fill = "lightgreen";
+      nodoActual.findMainElement().stroke = "green";
+      nodoActual.findMainElement().fill = "lightgreen";
 
-      let previousNode = currentNode;
+      let previousNode = nodoActual;
       setTimeout(function() {
           link.path.stroke = "green";
-          link.path.strokeDashArray = [4, 2];
           previousNode.findMainElement().stroke = "blue";
         }, timeoutDelayLinks);
       
-      // Actualizar nodo actual y contador
-      currentNode = nextNode;
+      nodoActual = nodoSgte;
       i++;
       
-    // Colorear enlace anterior rojo al pasar al siguiente nodo
     setTimeout(function() {
-        link.path.stroke = "red";
+        link.path.stroke = "blue";
         if(i <= inputWord.length - 1){
             moverCinta(-50);
             setTimeout(function() {
-                cambiarSimboloBPorA(i + 14);
+                cambiarSimboloBPorA(i + 12);
             },500);
           }else{
           moverCinta(50);
           }
-        procesarPalabra(currentNode, inputWord, i);
+        procesarPalabra(nodoActual, inputWord, i);
       }, timeoutDelay);
     } else {
-        // Verificar si el nodo actual es un estado de aceptación
-        if (currentNode.data.isAccept) {
-            currentNode.findMainElement().stroke = "red";
-            currentNode.findMainElement().fill = "yellow";
-            /*setTimeout(function() {
-              mostrarModal(true);
-            }, 1000);*/
+        if (nodoActual.data.isAccept) {
+            nodoActual.findMainElement().stroke = "black";
+            nodoActual.findMainElement().fill = "yellow";
         } else {
-            currentNode.findMainElement().stroke = "black";
-            currentNode.findMainElement().fill = "red";
-            /*setTimeout(function() {
-              mostrarModal(false);
-            }, 1000);*/
+            nodoActual.findMainElement().stroke = "black";
+            nodoActual.findMainElement().fill = "red";
         }
     }
 }
