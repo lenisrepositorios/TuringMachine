@@ -2,9 +2,6 @@ const gojs = go.GraphObject.make;
 let automata;
 let cinta ;
 
-Automata();
-crearCinta();
-
 function Automata(){
     let nodeDataArray = [
         { key: "1", text: "q1", loc: new go.Point(250, -50), isAccept: true},
@@ -38,17 +35,22 @@ function Automata(){
     automata.linkTemplate =
         gojs(go.Link,
         gojs(go.Shape, { strokeWidth: 2}),
+        { curve: go.Link.Bezier, curviness: 20 },
         gojs(go.Shape, { toArrow: "Standard", fill: null }),
-        gojs(go.TextBlock, new go.Binding("text", "text"),
-        { position: new go.Point(6, 6), font: "18px Poppins" }, 
-          new go.Binding("text", "loc"),
-          new go.Binding("segmentOffset", "", function(link) {
+        gojs(
+          go.TextBlock, 
+          new go.Binding("text", "text"),
+            
+        { 
+            position: new go.Point(6, -6), font: "18px Poppins" }, 
+            new go.Binding("text", "loc"),
+            new go.Binding("segmentOffset", "", function(link) {
             if (link.from === link.to && link.to === link.from) {
               return new go.Point(0, -30);
             } else {
-              return new go.Point(0, -40);
+              return new go.Point(0, -20);
             }
-          })
+          }),
           )
     );
     
@@ -154,17 +156,28 @@ function CambiarBporAenlaPalabra(palabra){
     return palabra;
 }
 
-function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
-    let timeoutDelayLinks = 1000;
-    let timeoutDelay = 2000;
-    if (i < (inputWord.length * 2) - 2) {
+const animacion = {
+    velocidad: 0,
+    espera: 0,
+}
+
+function rangeSlide(value){
+    document.getElementById('rangeValue').innerHTML = value
+    animacion.velocidad = value
+    animacion.espera = value
+  }
+
+function procesarPalabra(nodoActual, palabra_, i, auxIndex, auxIndex) {
+    let timeoutDelayLinks = animacion.espera;
+    let timeoutDelay = animacion.velocidad;
+    if (i < (palabra_.length * 2) - 2) {
       let nodoSgte = null;
       let simboloActual = "";
 
-      if(i < inputWord.length){
-        simboloActual = inputWord.charAt(i);
+      if(i < palabra_.length){
+        simboloActual = palabra_.charAt(i);
       }else{
-        simboloActual = inputWord.charAt(auxIndex);
+        simboloActual = palabra_.charAt(auxIndex);
         auxIndex--;
       }
 
@@ -172,7 +185,7 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
         if (link.fromNode.data.key === nodoActual.data.key){
             let transicion = link.data.text.split("\n");
             transicion.forEach(trans => {
-                if(i < inputWord.length - 1){
+                if(i < palabra_.length - 1){
                     if(trans[0] === simboloActual && trans[5] === "R"){
                         nodoSgte = automata.findNodeForKey(link.toNode.data.key);
                         console.log(simboloActual)
@@ -180,7 +193,7 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
                 }else{
                     if(trans[0] === simboloActual && trans[5] === "L"){
                         nodoSgte = automata.findNodeForKey(link.toNode.data.key);
-                        inputWord = CambiarBporAenlaPalabra(inputWord);
+                        palabra_ = CambiarBporAenlaPalabra(palabra_);
                         console.log(simboloActual)   
                     }
                 }
@@ -206,7 +219,6 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
           return;
       }
 
-      // Colorear el nodo actual y el enlace
       nodoActual.findMainElement().stroke = "green";
       nodoActual.findMainElement().fill = "lightgreen";
 
@@ -221,7 +233,7 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
       
     setTimeout(function() {
         link.path.stroke = "blue";
-        if(i <= inputWord.length - 1){
+        if(i <= palabra_.length - 1){
             moverCinta(-50);
             setTimeout(function() {
                 cambiarSimboloBPorA(i + 12);
@@ -229,12 +241,12 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
           }else{
           moverCinta(50);
           }
-        procesarPalabra(nodoActual, inputWord, i);
+        procesarPalabra(nodoActual, palabra_, i);
       }, timeoutDelay);
     } else {
         if (nodoActual.data.isAccept) {
             nodoActual.findMainElement().stroke = "black";
-            nodoActual.findMainElement().fill = "yellow";
+            nodoActual.findMainElement().fill = "green";
         } else {
             nodoActual.findMainElement().stroke = "black";
             nodoActual.findMainElement().fill = "red";
@@ -242,7 +254,6 @@ function procesarPalabra(nodoActual, inputWord, i, auxIndex, auxIndex) {
     }
 }
   
-
   function sintetizarMensaje(texto, elemento) {
     let sintetizador = window.speechSynthesis;
   
@@ -269,7 +280,6 @@ function inicializarProceso(palabra) {
     reinicio();
     return automata.findNodeForKey("1");
 }
-  
-  function rangeSlide(value){
-    document.getElementById('rangeValue').innerHTML = value
-  }
+
+Automata();
+crearCinta();
