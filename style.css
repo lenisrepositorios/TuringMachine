@@ -111,7 +111,27 @@
       }
 
       #h2I{
-        padding-left: 20%;
+        padding-left: 34%;
+      }
+
+      #h2II{
+        padding-left: 24%;
+      }
+
+      #Secuencial{
+        padding-left: 28%;
+        font-size: 20px;
+        text-decoration: none;
+        color: black;
+        font-style: bold;
+
+        display: block;
+        padding: 2%px 6%;
+        border-bottom: 1px solid #242121;
+      }
+
+      li{
+        list-style: none;
       }
 
       .main-content{
@@ -143,9 +163,9 @@
     }
 
     .rectangulo {
-      position: absolute;
-      top: 628px;
-      left: 868px;
+      position: fixed;
+      top: 706px;
+      left: 871px;
       transform: translateX(-50%);
       border: 4px solid rgb(17, 255, 17);
       /*padding: 25px;*/   
