@@ -167,9 +167,10 @@ function rangeSlide(value){
     animacion.espera = value
   }
 
-function procesarPalabra(nodoActual, palabra_, i, auxIndex, auxIndex) {
+function CambiaryAnimarPalabra(nodoActual, palabra_, i, auxIndex, auxIndex) {
     let timeoutDelayLinks = animacion.espera;
     let timeoutDelay = animacion.velocidad;
+
     if (i < (palabra_.length * 2) - 2) {
       let nodoSgte = null;
       let simboloActual = "";
@@ -241,7 +242,7 @@ function procesarPalabra(nodoActual, palabra_, i, auxIndex, auxIndex) {
           }else{
           moverCinta(50);
           }
-        procesarPalabra(nodoActual, palabra_, i);
+        CambiaryAnimarPalabra(nodoActual, palabra_, i);
       }, timeoutDelay);
     } else {
         if (nodoActual.data.isAccept) {
@@ -270,7 +271,7 @@ function procesarPalabra(nodoActual, palabra_, i, auxIndex, auxIndex) {
 
     let currentNode = inicializarProceso(palabra);
 
-    procesarPalabra(currentNode, inputWord, 0, inputWord.length - 1);
+    CambiaryAnimarPalabra(currentNode, inputWord, 0, inputWord.length - 1);
 
     localStorage.setItem(palabra, resultado);
 }
